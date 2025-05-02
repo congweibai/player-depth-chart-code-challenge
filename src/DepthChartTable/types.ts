@@ -13,6 +13,6 @@ type Row = {
 };
 
 export type DepthChartTableProps = {
-  positionLabels: PlayerPositionLabel[];
+  spotLabels: PlayerPositionLabel[];
   rows: Row[];
 };

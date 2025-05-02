@@ -7,11 +7,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { DepthChartTableProps } from "./types";
 
-export const DepthChartTable = ({
-  positionLabels,
-  rows,
-}: DepthChartTableProps) => {
-  const maxPlayerCount = positionLabels.length;
+export const DepthChartTable = ({ spotLabels, rows }: DepthChartTableProps) => {
+  const maxPlayerCount = spotLabels.length;
 
   return (
     <TableContainer component={Paper}>
@@ -19,7 +16,7 @@ export const DepthChartTable = ({
         <TableHead>
           <TableRow>
             <TableCell></TableCell>
-            {positionLabels.map((label, index) => (
+            {spotLabels.map((label, index) => (
               <TableCell key={index} align="center">
                 {label}
               </TableCell>

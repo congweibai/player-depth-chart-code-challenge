@@ -1,65 +1,22 @@
-import { Box, Button, ButtonGroup } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { DepthChartTable } from "./DepthChartTable/DepthChartTable";
-import { PlayerPositionLabel } from "./DepthChartTable/types";
-import { GameType } from "./types";
-
-function createData(
-  position: string,
-  playerArray: {
-    id: string;
-    name: string;
-  }[]
-) {
-  return {
-    position,
-    playerArray,
-  };
-}
-
-const rows = [
-  createData("QB", [
-    {
-      id: "1",
-      name: "Tom Brady",
-    },
-    {
-      id: "2",
-      name: "Cam Newton",
-    },
-  ]),
-  createData("WR", []),
-  createData("RB", []),
-  createData("TE", []),
-  createData("K", []),
-  createData("P", [
-    {
-      id: "1",
-      name: "Tom Brady",
-    },
-    {
-      id: "2",
-      name: "Cam Newton",
-    },
-    {
-      id: "3",
-      name: "Wyatt Newton",
-    },
-    {
-      id: "2",
-      name: "Jasmine Newton",
-    },
-  ]),
-  createData("KR", []),
-  createData("PR", []),
-];
+import { GameType, gameTypeText } from "./types";
+import { useGetGameData } from "./hooks";
+import { useState } from "react";
 
 function App() {
-  const positionLabels = [
-    PlayerPositionLabel.Starter,
-    PlayerPositionLabel.Second,
-    PlayerPositionLabel.Third,
-    PlayerPositionLabel.Fourth,
-  ];
+  const [gameType, setGameType] = useState<GameType>(GameType.NFL);
+  const { gameData, spotLabels } = useGetGameData(gameType);
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setGameType(event.target.value as GameType);
+  };
   return (
     <>
       <Box
@@ -68,12 +25,24 @@ function App() {
         alignItems="center"
         marginBottom={2}
       >
-        <ButtonGroup variant="outlined" aria-label="Basic button group">
-          <Button>{GameType.NFL}</Button>
-          <Button>{GameType.SOCCER}</Button>
-        </ButtonGroup>
+        <FormControl
+          variant="filled"
+          sx={{ m: 1, minWidth: 220, background: "white" }}
+        >
+          <InputLabel id="game-type-select-label">{gameTypeText}</InputLabel>
+          <Select
+            labelId="game-type-select-label"
+            id="game-type-select"
+            value={gameType}
+            onChange={handleChange}
+            label={gameTypeText}
+          >
+            <MenuItem value={GameType.NFL}> {GameType.NFL}</MenuItem>
+            <MenuItem value={GameType.SOCCER}> {GameType.SOCCER}</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
-      <DepthChartTable positionLabels={positionLabels} rows={rows} />
+      <DepthChartTable spotLabels={spotLabels} rows={gameData} />
     </>
   );
 }
