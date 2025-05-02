@@ -3,7 +3,7 @@ import { DepthChartTable } from "../DepthChartTable";
 import { PlayerPositionLabel, DepthChartTableProps } from "../types";
 
 const mockProps: DepthChartTableProps = {
-  positionLabels: [
+  spotLabels: [
     PlayerPositionLabel.Starter,
     PlayerPositionLabel.Second,
     PlayerPositionLabel.Third,
@@ -33,7 +33,7 @@ describe("DepthChartTable", () => {
   it("should render the header labels", () => {
     render(<DepthChartTable {...mockProps} />);
 
-    mockProps.positionLabels.forEach((label) => {
+    mockProps.spotLabels.forEach((label) => {
       expect(screen.getByText(label)).toBeInTheDocument();
     });
   });

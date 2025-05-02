@@ -7,3 +7,5 @@ export enum GameType {
   NFL = "NFL",
   SOCCER = "Soccer",
 }
+
+export const gameTypeText = "Game type";
