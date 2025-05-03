@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { PlayerPositionLabel } from "../DepthChartTable/types";
-import { GameType, Player } from "../types";
-import { SportPositionMap } from "./types";
+import { GameType, Player, Spot } from "../types";
+import { NFLPositions, SoccerPositions, SportPositionMap } from "./types";
+import { insertWithMaxLength } from "./utils";
 
 function createDefaultData(position: string, playerArray: Player[]) {
   return {
@@ -17,18 +19,52 @@ const spotLabels = [
 ];
 
 export const useGetGameData = (gameType: GameType) => {
-  const gamePositions = SportPositionMap[gameType];
+  const [gameWholeData, setGameWholeData] = useState({
+    [GameType.NFL]: SportPositionMap[GameType.NFL].map((position) => {
+      return createDefaultData(position, []);
+    }),
+    [GameType.SOCCER]: SportPositionMap[GameType.SOCCER].map((position) => {
+      return createDefaultData(position, []);
+    }),
+  });
 
   if (!SportPositionMap[gameType]) {
     throw new Error(`Unsupported game type: ${gameType}`);
   }
 
-  const gameData = gamePositions.map((position) => {
-    return createDefaultData(position, []);
-  });
+  const gameData = gameWholeData[gameType];
+
+  const addPlayerToGame = ({
+    player,
+    position,
+    gameType,
+    spot,
+  }: {
+    player: Player;
+    position: NFLPositions | SoccerPositions;
+    gameType: GameType;
+    spot: Spot;
+  }) => {
+    const newGameData = gameWholeData[gameType].slice();
+    const positionIndex = newGameData.findIndex(
+      (row) => row.position === position
+    );
+    if (positionIndex === -1) {
+      throw new Error(`Position not found: ${position}`);
+    }
+    const maxLength = spotLabels.length;
+    newGameData[positionIndex].playerArray = insertWithMaxLength(
+      newGameData[positionIndex].playerArray,
+      player,
+      spot,
+      maxLength
+    );
+    setGameWholeData({ ...gameWholeData, [gameType]: newGameData });
+  };
 
   return {
     gameData,
     spotLabels,
+    addPlayerToGame,
   };
 };

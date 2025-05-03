@@ -9,3 +9,5 @@ export enum GameType {
 }
 
 export const gameTypeText = "Game type";
+
+export type Spot = -1 | 0 | 1 | 2 | 3;
