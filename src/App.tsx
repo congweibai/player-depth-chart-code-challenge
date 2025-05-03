@@ -10,10 +10,11 @@ import { DepthChartTable } from "./DepthChartTable/DepthChartTable";
 import { GameType, gameTypeText } from "./types";
 import { useGetGameData } from "./hooks";
 import { useState } from "react";
+import { AddPlayerToGameForm } from "./AddPlayerToGameForm/AddPlayerToGameForm";
 
 function App() {
   const [gameType, setGameType] = useState<GameType>(GameType.NFL);
-  const { gameData, spotLabels } = useGetGameData(gameType);
+  const { gameData, spotLabels, addPlayerToGame } = useGetGameData(gameType);
   const handleChange = (event: SelectChangeEvent<string>) => {
     setGameType(event.target.value as GameType);
   };
@@ -43,6 +44,12 @@ function App() {
         </FormControl>
       </Box>
       <DepthChartTable spotLabels={spotLabels} rows={gameData} />
+      <Box>
+        <AddPlayerToGameForm
+          addPlayerToGame={addPlayerToGame}
+          gameType={gameType}
+        />
+      </Box>
     </>
   );
 }

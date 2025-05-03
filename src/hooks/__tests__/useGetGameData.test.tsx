@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useGetGameData } from "../useGetGameData";
-import { SportPositionMap } from "../types";
+import { NFLPositions, SportPositionMap } from "../types";
 import { GameType } from "../../types";
 import { PlayerPositionLabel } from "../../DepthChartTable/types";
 
@@ -35,5 +35,48 @@ describe("useGetGameData", () => {
         PlayerPositionLabel.Fourth,
       ]);
     });
+  });
+
+  it("should add player to game", () => {
+    const { result } = renderHook(() => useGetGameData(GameType.NFL));
+    const { addPlayerToGame } = result.current;
+    addPlayerToGame({
+      player: { id: "1", name: "John Doe" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 0,
+    });
+    const { gameData } = result.current;
+    const expectedPositions = SportPositionMap[GameType.NFL];
+    expect(gameData).toHaveLength(expectedPositions.length);
+    expect(gameData[0].playerArray).toHaveLength(1);
+    expect(gameData[0].playerArray[0].id).toBe("1");
+    expect(gameData[0].playerArray[0].name).toBe("John Doe");
+
+    addPlayerToGame({
+      player: { id: "2", name: "Jane Doe" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 0,
+    });
+    expect(gameData[0].playerArray).toHaveLength(2);
+    expect(gameData[0].playerArray[0].id).toBe("2");
+    expect(gameData[0].playerArray[0].name).toBe("Jane Doe");
+    expect(gameData[0].playerArray[1].id).toBe("1");
+    expect(gameData[0].playerArray[1].name).toBe("John Doe");
+
+    addPlayerToGame({
+      player: { id: "3", name: "Wyatt Bai" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 3,
+    });
+    expect(gameData[0].playerArray).toHaveLength(3);
+    expect(gameData[0].playerArray[0].id).toBe("2");
+    expect(gameData[0].playerArray[0].name).toBe("Jane Doe");
+    expect(gameData[0].playerArray[1].id).toBe("1");
+    expect(gameData[0].playerArray[1].name).toBe("John Doe");
+    expect(gameData[0].playerArray[2].id).toBe("3");
+    expect(gameData[0].playerArray[2].name).toBe("Wyatt Bai");
   });
 });
