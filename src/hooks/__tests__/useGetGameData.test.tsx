@@ -79,4 +79,55 @@ describe("useGetGameData", () => {
     expect(gameData[0].playerArray[2].id).toBe("3");
     expect(gameData[0].playerArray[2].name).toBe("Wyatt Bai");
   });
+
+  it("should remove player from game", () => {
+    const { result } = renderHook(() => useGetGameData(GameType.NFL));
+    const { addPlayerToGame, removePlayerFromGame } = result.current;
+    addPlayerToGame({
+      player: { id: "1", name: "John Doe" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 0,
+    });
+    addPlayerToGame({
+      player: { id: "2", name: "Jane Doe" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 1,
+    });
+    addPlayerToGame({
+      player: { id: "3", name: "Wyatt Bai" },
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+      spot: 3,
+    });
+    const { gameData } = result.current;
+    expect(gameData[0].playerArray).toHaveLength(3);
+    expect(gameData[0].playerArray[0].id).toBe("1");
+    expect(gameData[0].playerArray[0].name).toBe("John Doe");
+    expect(gameData[0].playerArray[1].id).toBe("2");
+    expect(gameData[0].playerArray[1].name).toBe("Jane Doe");
+    expect(gameData[0].playerArray[2].id).toBe("3");
+    expect(gameData[0].playerArray[2].name).toBe("Wyatt Bai");
+
+    removePlayerFromGame({
+      playerIndexToRemove: 0,
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+    });
+    expect(gameData[0].playerArray).toHaveLength(2);
+    expect(gameData[0].playerArray[0].id).toBe("2");
+    expect(gameData[0].playerArray[0].name).toBe("Jane Doe");
+    expect(gameData[0].playerArray[1].id).toBe("3");
+    expect(gameData[0].playerArray[1].name).toBe("Wyatt Bai");
+
+    removePlayerFromGame({
+      playerIndexToRemove: 0,
+      position: NFLPositions.QB,
+      gameType: GameType.NFL,
+    });
+    expect(gameData[0].playerArray).toHaveLength(1);
+    expect(gameData[0].playerArray[0].id).toBe("3");
+    expect(gameData[0].playerArray[0].name).toBe("Wyatt Bai");
+  });
 });

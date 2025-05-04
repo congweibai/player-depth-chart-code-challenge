@@ -11,13 +11,27 @@ import { GameType, gameTypeText } from "./types";
 import { useGetGameData } from "./hooks";
 import { useState } from "react";
 import { AddPlayerToGameForm } from "./AddPlayerToGameForm/AddPlayerToGameForm";
+import { NFLPositions, SoccerPositions } from "./hooks/types";
 
 function App() {
   const [gameType, setGameType] = useState<GameType>(GameType.NFL);
-  const { gameData, spotLabels, addPlayerToGame } = useGetGameData(gameType);
+  const { gameData, spotLabels, addPlayerToGame, removePlayerFromGame } =
+    useGetGameData(gameType);
   const handleChange = (event: SelectChangeEvent<string>) => {
     setGameType(event.target.value as GameType);
   };
+
+  const onHandleRemovePlayer = (
+    indexToRemove: number,
+    position: NFLPositions | SoccerPositions
+  ) => {
+    removePlayerFromGame({
+      playerIndexToRemove: indexToRemove,
+      position,
+      gameType,
+    });
+  };
+
   return (
     <>
       <Box
@@ -43,7 +57,11 @@ function App() {
           </Select>
         </FormControl>
       </Box>
-      <DepthChartTable spotLabels={spotLabels} rows={gameData} />
+      <DepthChartTable
+        spotLabels={spotLabels}
+        rows={gameData}
+        handleRemovePlayer={onHandleRemovePlayer}
+      />
       <Box>
         <AddPlayerToGameForm
           addPlayerToGame={addPlayerToGame}

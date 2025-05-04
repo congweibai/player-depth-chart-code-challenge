@@ -1,3 +1,4 @@
+import { PlayerPositionLabel } from "../DepthChartTable/types";
 import { NFLPositions, SoccerPositions } from "../hooks/types";
 import { GameType, Player, Spot } from "../types";
 
@@ -16,6 +17,13 @@ export type PlayerOption = {
   label: string;
   value: Player;
 };
+
+export const spotLabelPair = [
+  PlayerPositionLabel.Starter,
+  PlayerPositionLabel.Second,
+  PlayerPositionLabel.Third,
+  PlayerPositionLabel.Fourth,
+];
 
 export type SpotOption = {
   label: string;
