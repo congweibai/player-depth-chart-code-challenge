@@ -66,6 +66,7 @@ function App() {
         <AddPlayerToGameForm
           addPlayerToGame={addPlayerToGame}
           gameType={gameType}
+          gameData={gameData}
         />
       </Box>
     </>

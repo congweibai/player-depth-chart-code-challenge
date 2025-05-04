@@ -13,21 +13,28 @@ import {
 import { Player, Spot } from "../types";
 import { SportPositionMap } from "../hooks/types";
 
+const SPOT_OPTIONS = [0, 1, 2, 3];
+
 export const AddPlayerToGameForm = ({
   gameType,
   addPlayerToGame,
+  gameData,
 }: AddPlayerToGameFormProps) => {
   const players = useGetPlayers();
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
+    setValue,
   } = useForm<AddPlayerToGameFormInputs>({
     defaultValues: {
       spot: -1,
       player: null,
     },
   });
+
+  const position = watch("position");
 
   const positionOptions: PositionOption[] = SportPositionMap[gameType].map(
     (position) => ({
@@ -36,12 +43,27 @@ export const AddPlayerToGameForm = ({
     })
   );
 
-  const playerOptions: PlayerOption[] = players.map((player) => ({
-    label: player.name,
-    value: player,
-  }));
+  const currentPlayers =
+    gameData?.find((row) => row.position === position)?.playerArray || [];
+  const currentSpotsLength = currentPlayers.length;
 
-  const spotOptions: SpotOption[] = [0, 1, 2, 3].map((spot) => ({
+  const playerOptions: PlayerOption[] = players
+    .filter(
+      (player) =>
+        !currentPlayers?.some((currentPlayer) => {
+          return currentPlayer.id === player.id;
+        })
+    )
+    .map((player) => ({
+      label: player.name,
+      value: player,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  const spotOptions: SpotOption[] = SPOT_OPTIONS.slice(
+    0,
+    Math.min(currentSpotsLength + 1, SPOT_OPTIONS.length)
+  ).map((spot) => ({
     label: spotLabelPair[spot],
     value: spot as Spot,
   }));
@@ -53,6 +75,7 @@ export const AddPlayerToGameForm = ({
       gameType,
       spot: data.spot ?? -1,
     });
+    setValue("player", null);
   };
 
   return (
