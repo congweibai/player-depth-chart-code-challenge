@@ -43,4 +43,8 @@ export type AddPlayerToGameFormProps = {
     gameType: GameType;
     spot: Spot;
   }) => void;
+  gameData: {
+    position: string;
+    playerArray: Player[];
+  }[];
 };
