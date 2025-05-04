@@ -2,7 +2,7 @@ import { useState } from "react";
 import { PlayerPositionLabel } from "../DepthChartTable/types";
 import { GameType, Player, Spot } from "../types";
 import { NFLPositions, SoccerPositions, SportPositionMap } from "./types";
-import { insertWithMaxLength } from "./utils";
+import { insertWithMaxLength, removeItemAtIndex } from "./utils";
 
 function createDefaultData(position: string, playerArray: Player[]) {
   return {
@@ -62,9 +62,33 @@ export const useGetGameData = (gameType: GameType) => {
     setGameWholeData({ ...gameWholeData, [gameType]: newGameData });
   };
 
+  const removePlayerFromGame = ({
+    playerIndexToRemove,
+    position,
+    gameType,
+  }: {
+    playerIndexToRemove: number;
+    position: NFLPositions | SoccerPositions;
+    gameType: GameType;
+  }) => {
+    const newGameData = gameWholeData[gameType].slice();
+    const positionIndex = newGameData.findIndex(
+      (row) => row.position === position
+    );
+    if (positionIndex === -1) {
+      throw new Error(`Position not found: ${position}`);
+    }
+    newGameData[positionIndex].playerArray = removeItemAtIndex(
+      newGameData[positionIndex].playerArray,
+      playerIndexToRemove
+    );
+    setGameWholeData({ ...gameWholeData, [gameType]: newGameData });
+  };
+
   return {
     gameData,
     spotLabels,
     addPlayerToGame,
+    removePlayerFromGame,
   };
 };

@@ -1,13 +1,14 @@
 import { Box, Button } from "@mui/material";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import Select from "react-select";
-import { useGetPlayers } from "../hooks/useGetPlayers";
+import { useGetPlayers } from "../hooks";
 import {
   AddPlayerToGameFormInputs,
   PlayerOption,
   PositionOption,
   SpotOption,
   AddPlayerToGameFormProps,
+  spotLabelPair,
 } from "./types";
 import { Player, Spot } from "../types";
 import { SportPositionMap } from "../hooks/types";
@@ -41,7 +42,7 @@ export const AddPlayerToGameForm = ({
   }));
 
   const spotOptions: SpotOption[] = [0, 1, 2, 3].map((spot) => ({
-    label: `Spot ${spot}`,
+    label: spotLabelPair[spot],
     value: spot as Spot,
   }));
 

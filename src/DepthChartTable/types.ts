@@ -1,10 +1,11 @@
+import { NFLPositions, SoccerPositions } from "../hooks/types";
 import { Player } from "../types";
 
 export enum PlayerPositionLabel {
   Starter = "Starter",
-  Second = "2nd",
-  Third = "3rd",
-  Fourth = "4th",
+  Second = "Second",
+  Third = "Third",
+  Fourth = "Fourth",
 }
 
 type Row = {
@@ -15,4 +16,8 @@ type Row = {
 export type DepthChartTableProps = {
   spotLabels: PlayerPositionLabel[];
   rows: Row[];
+  handleRemovePlayer: (
+    playerIndexToRemove: number,
+    position: NFLPositions | SoccerPositions
+  ) => void;
 };

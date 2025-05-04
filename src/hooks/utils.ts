@@ -25,3 +25,10 @@ export function insertWithMaxLength<T>(
   // Trim the array if it exceeds max length
   return newArray.slice(0, maxLength);
 }
+
+export function removeItemAtIndex<T>(array: T[], index: number): T[] {
+  if (index < 0 || index >= array.length) {
+    return array;
+  }
+  return [...array.slice(0, index), ...array.slice(index + 1)];
+}
