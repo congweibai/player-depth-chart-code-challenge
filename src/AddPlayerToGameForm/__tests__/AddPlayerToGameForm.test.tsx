@@ -17,7 +17,7 @@ describe("AddPlayerToGameForm", () => {
       { id: "4", name: "Player Four" },
     ]);
   });
-  it("should render two selector and a button", () => {
+  it("should render two selector and a button and label", () => {
     const mockAddPlayerToGame = vitest.fn();
     const mockGameData = [
       {
@@ -37,12 +37,14 @@ describe("AddPlayerToGameForm", () => {
     const positionSelect = screen.getByLabelText(/select position/i);
     const spotSelect = screen.getByLabelText(/select spot/i);
     const addPlayerButton = screen.getByRole("button", {
-      name: /add player to game/i,
+      name: /Add Player/,
     });
+    const addPlayerLabel = screen.getByText("Add Player to NFL");
     expect(playerSelect).toBeInTheDocument();
     expect(positionSelect).toBeInTheDocument();
     expect(spotSelect).toBeInTheDocument();
     expect(addPlayerButton).toBeInTheDocument();
+    expect(addPlayerLabel).toBeInTheDocument();
   });
 
   it("should disable add player button if no player is selected", () => {
@@ -61,7 +63,7 @@ describe("AddPlayerToGameForm", () => {
       />
     );
     const addPlayerButton = screen.getByRole("button", {
-      name: /add player to game/i,
+      name: /add player/i,
     });
     expect(addPlayerButton).toBeDisabled();
   });
@@ -88,7 +90,7 @@ describe("AddPlayerToGameForm", () => {
     await user.click(options[0]);
     expect(
       screen.getByRole("button", {
-        name: /add player to game/i,
+        name: /add player/i,
       })
     ).toBeDisabled();
 
@@ -98,7 +100,7 @@ describe("AddPlayerToGameForm", () => {
     await user.click(positionOptions[0]);
     expect(
       screen.getByRole("button", {
-        name: /add player to game/i,
+        name: /add player/i,
       })
     ).toBeEnabled();
     const spotSelect = screen.getByLabelText(/select spot/i);
@@ -106,7 +108,7 @@ describe("AddPlayerToGameForm", () => {
     const spotOptions = await screen.findAllByRole("option");
     await user.click(spotOptions[0]);
     const submitButton = screen.getByRole("button", {
-      name: /add player to game/i,
+      name: /add player/i,
     });
     await user.click(submitButton);
     expect(mockAddPlayerToGame).toHaveBeenCalled();

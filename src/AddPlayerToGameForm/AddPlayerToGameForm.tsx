@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import { useGetPlayers } from "../hooks";
@@ -81,6 +81,9 @@ export const AddPlayerToGameForm = ({
   return (
     <>
       <Box sx={{ width: "400px" }}>
+        <Typography variant="h6" color="black">
+          Add Player to {gameType}
+        </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Player Select */}
           <Box mb={2}>
@@ -188,7 +191,7 @@ export const AddPlayerToGameForm = ({
           </Box>
 
           <Button type="submit" variant="contained" disabled={!isValid}>
-            Add Player to Game
+            Add Player
           </Button>
         </form>
       </Box>
