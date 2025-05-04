@@ -16,3 +16,7 @@
 .react-select-container {
   color: black;
 }
+
+label {
+  color: black;
+}
